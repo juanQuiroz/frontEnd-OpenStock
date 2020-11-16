@@ -71,7 +71,7 @@ const Productos = () => {
 
         <table className="shadow text-sm table-auto bg-white rounded-md mt-2 w-full">
           <thead>
-            <tr className="bg-blue-700 rounded-md text-white">
+            <tr className="bg-gray-600 rounded-md text-white">
               <th className="px-4 py-2">Nombre de producto</th>
               <th className="px-4 py-2">Descripción</th>
               <th className="px-4 py-2">Cod. Interno</th>
