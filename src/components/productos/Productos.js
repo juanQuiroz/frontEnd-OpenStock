@@ -1,6 +1,9 @@
-import React, { Fragment } from "react";
+import React,{ Fragment,useEffect } from "react";
+import useProduct from '../../hooks/product/index'
 
 const Productos = () => {
+  const  {products}  = useProduct()
+  console.log(products)
   return (
     <Fragment>
       <div>
@@ -8,7 +11,7 @@ const Productos = () => {
           <h1 className="font-base text-2xl text-center mb-4 text-gray-700">
             Registro de Productos
           </h1>
-
+            
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-gray-700 text-sm font-bold mb-1">
