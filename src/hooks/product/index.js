@@ -1,9 +1,10 @@
-import {useEffect, useState} from 'react'
+import {useEffect, useState, useCallback} from 'react'
 import getProductsService from '../../services/product'
+import addProductService from '../../services/addProduct'
 
 export default function useProduct () {
   const [products, setProducts] = useState([])
-  
+  const [inputProduct, setInputProduct] = useState(null)
 
   useEffect(function(){
     getProductsService()
@@ -15,6 +16,14 @@ export default function useProduct () {
 
   }, [])
 
-  return{products}
+  const addProduct = useCallback(({name,category,description,imgURL}) => {
+    addProductService({name,category,description,imgURL})
+      .then(setInputProduct)
+      .catch(err => {
+        console.error(err)
+      })
+  }, [setInputProduct]) 
+
+  return{products, addProduct}
 
 }
