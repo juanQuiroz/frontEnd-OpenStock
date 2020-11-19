@@ -1,6 +1,12 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useContext } from "react";
+import useExample from '../../hooks/product/example'
 
 const Movimientos = () => {
+  //Example - Intercambio de Información entre componentes
+  const {data} = useExample()
+  console.log("Page Movimientos - List Product: ", data)
+  // ---- end ----
+
   return (
     <Fragment>
       <div>
@@ -186,6 +192,7 @@ const Movimientos = () => {
           </table>
         </div>
       </div>
+      <pre>{JSON.stringify(data,null,2)}</pre>
     </Fragment>
   );
 };

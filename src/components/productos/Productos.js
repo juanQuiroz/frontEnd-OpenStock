@@ -1,20 +1,26 @@
-import React,{ Fragment,useEffect,useState } from "react";
+import React,{ Fragment,useState } from "react";
 import useProduct from '../../hooks/product/index'
+import useExample from '../../hooks/product/example'
 
 const Productos = () => {
+  //Example - Intercambio de Información entre componentes
+  const {data,setData} = useExample()
+  console.log("Page Porductos - List Product: ", data)
+  // ---- end ----
   const  {products, addProduct}  = useProduct()
+  
   const [name,setName] = useState('')
   const [category, setCategory] = useState('')
   const [description, setDescription] = useState('')
   const [imgURL, setImgURL] = useState('')
 
-  console.log(products)
 
   const handleSubmit = async (e) =>{
     e.preventDefault();
     console.log("ASdasdasd")
     addProduct({name, category, description, imgURL})
   }
+
   return (
     <Fragment>
       <div>
@@ -27,7 +33,7 @@ const Productos = () => {
          
             <div>
               <label className="block text-gray-700 text-sm font-bold mb-1">
-                Nombre de producto
+                Nombre
               </label>
               <input
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -152,6 +158,7 @@ const Productos = () => {
           </tbody>
         </table>
       </div>
+      <pre>{JSON.stringify(data,null,2)}</pre>
     </Fragment>
   );
 };
