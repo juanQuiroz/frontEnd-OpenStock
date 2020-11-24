@@ -1,25 +1,48 @@
-import React,{ Fragment,useState } from "react";
-import useProduct from '../../hooks/product/index'
-import useExample from '../../hooks/product/example'
+import React,{ Fragment,useState,useContext} from "react";
+import {ProductContext} from '../../context/ProductContext'
 
 const Productos = () => {
-  //Example - Intercambio de Información entre componentes
-  const {data,setData} = useExample()
-  console.log("Page Porductos - List Product: ", data)
-  // ---- end ----
-  const  {products, addProduct}  = useProduct()
-  
-  const [name,setName] = useState('')
-  const [category, setCategory] = useState('')
-  const [description, setDescription] = useState('')
-  const [imgURL, setImgURL] = useState('')
+  const { 
+    products, 
+    findProduct, 
+    createProduct,
+    deleteProduct,
+    editProduct,
+    updateProduct, 
+  } = useContext(ProductContext);
 
+  //print all Products
+  console.log(products)
+
+  const [productData, setProductData] = useState({_id:'', name:'', category:'', description:''});
 
   const handleSubmit = async (e) =>{
     e.preventDefault();
-    console.log("ASdasdasd")
-    addProduct({name, category, description, imgURL})
+    console.log("Agregar Producto: ",productData)
+    createProduct(productData);
+    setProductData({_id:'', name:'', category:'', description:''});
   }
+
+  const updateField = (data, field) => {
+    setProductData({
+      ...productData,
+      [field]: data,
+    });
+    console.log(productData);
+  };
+
+  const _deleteProduct = (product) => {
+    console.log("Delete product: ",product._id)
+      deleteProduct(product._id);
+      setProductData({_id:'', name:'', category:'', description:''});
+  };
+  
+  const _editProduct = (product) => {
+    console.log("Edit product: ",product)
+    setProductData(product)
+    //editProduct(product);
+    //setProductData({_id:'', name:'', category:'', description:''});
+  };
 
   return (
     <Fragment>
@@ -30,29 +53,6 @@ const Productos = () => {
           </h1>
             
           <div className="grid grid-cols-2 gap-3">
-         
-            <div>
-              <label className="block text-gray-700 text-sm font-bold mb-1">
-                Nombre
-              </label>
-              <input
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="text"
-                onChange={e => setName(e.target.value)} 
-                value={name}
-              />
-            </div>
-            <div>
-              <label className="block text-gray-700 text-sm font-bold mb-1">
-                Descripción
-              </label>
-              <input
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="text"
-                onChange={e => setDescription(e.target.value)} 
-                value={description}
-              />
-            </div>
             <div>
               <label className="block text-gray-700 text-sm font-bold mb-1">
                 Código interno
@@ -60,6 +60,19 @@ const Productos = () => {
               <input
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 type="text"
+                onChange={(e) => updateField(e.target.value, "_id")} 
+                value={productData._id}
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 text-sm font-bold mb-1">
+                Nombre
+              </label>
+              <input
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                type="text"
+                onChange={(e) => updateField(e.target.value, "name")} 
+                value={productData.name}
               />
             </div>
             <div>
@@ -69,8 +82,19 @@ const Productos = () => {
               <input
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 type="text"
-                onChange={e => setCategory(e.target.value)} 
-                value={category}
+                onChange={(e) => updateField(e.target.value, "category")} 
+                value={productData.category}
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 text-sm font-bold mb-1">
+                Descripción
+              </label>
+              <input
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                type="text"
+                onChange={(e) => updateField(e.target.value, "description")} 
+                value={productData.description}
               />
             </div>
           </div>
@@ -100,65 +124,33 @@ const Productos = () => {
         <table className="shadow text-sm table-auto bg-white rounded-md mt-2 w-full">
           <thead>
             <tr className="bg-gray-600 rounded-md text-white">
-              <th className="px-4 py-2">Nombre de producto</th>
-              <th className="px-4 py-2">Descripción</th>
-              <th className="px-4 py-2">Cod. Interno</th>
+              <th className="px-4 py-2">Codigo Interno</th>
+              <th className="px-4 py-2">Nombre</th>
               <th className="px-4 py-2">Categoria</th>
+              <th className="px-4 py-2">Descripción</th>
+              <th className="px-4 py-2">Acciones</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td className="border px-4 py-2">Coca cola</td>
-              <td className="border px-4 py-2">Cocacola 2L descartable</td>
-              <td className="border px-4 py-2">cc2ld</td>
-              <td className="border px-4 py-2">Bebidas</td>
-            </tr>
-            <tr>
-              <td className="border px-4 py-2">Coca cola</td>
-              <td className="border px-4 py-2">Cocacola 2L descartable</td>
-              <td className="border px-4 py-2">cc2ld</td>
-              <td className="border px-4 py-2">Bebidas</td>
-            </tr>
-            <tr>
-              <td className="border px-4 py-2">Coca cola</td>
-              <td className="border px-4 py-2">Cocacola 2L descartable</td>
-              <td className="border px-4 py-2">cc2ld</td>
-              <td className="border px-4 py-2">Bebidas</td>
-            </tr>
-            <tr>
-              <td className="border px-4 py-2">Coca cola</td>
-              <td className="border px-4 py-2">Cocacola 2L descartable</td>
-              <td className="border px-4 py-2">cc2ld</td>
-              <td className="border px-4 py-2">Bebidas</td>
-            </tr>
-            <tr>
-              <td className="border px-4 py-2">Coca cola</td>
-              <td className="border px-4 py-2">Cocacola 2L descartable</td>
-              <td className="border px-4 py-2">cc2ld</td>
-              <td className="border px-4 py-2">Bebidas</td>
-            </tr>
-            <tr>
-              <td className="border px-4 py-2">Coca cola</td>
-              <td className="border px-4 py-2">Cocacola 2L descartable</td>
-              <td className="border px-4 py-2">cc2ld</td>
-              <td className="border px-4 py-2">Bebidas</td>
-            </tr>
-            <tr>
-              <td className="border px-4 py-2">Coca cola</td>
-              <td className="border px-4 py-2">Cocacola 2L descartable</td>
-              <td className="border px-4 py-2">cc2ld</td>
-              <td className="border px-4 py-2">Bebidas</td>
-            </tr>
-            <tr>
-              <td className="border px-4 py-2">Coca cola</td>
-              <td className="border px-4 py-2">Cocacola 2L descartable</td>
-              <td className="border px-4 py-2">cc2ld</td>
-              <td className="border px-4 py-2">Bebidas</td>
-            </tr>
+          {
+          products.map((item)=>{
+            return(
+              <tr key={item._id}>
+                <td >{item._id}</td>
+                <td>{item.name}</td>
+                <td>{item.category}</td>
+                <td>{item.description}</td>
+                <td>
+                <button className="border border-yellow-500 bg-yellow-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-yellow-600 focus:outline-none focus:shadow-outline" onClick={() => _editProduct(item)}>Edit</button>
+                <button className="border border-red-500 bg-red-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline" onClick={() => _deleteProduct(item)}>Delete</button>
+                </td>
+              </tr>
+            )
+          })
+          }
           </tbody>
         </table>
       </div>
-      <pre>{JSON.stringify(data,null,2)}</pre>
     </Fragment>
   );
 };

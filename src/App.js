@@ -4,6 +4,7 @@ import "./assets/output.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import {DataProvider} from './context/DataContext'
+import ProductContextProvider from './context/ProductContext'
 import Navbar from "./components/layouts/Navbar";
 import Productos from "./components/productos/Productos";
 import Nosotros from "./components/nosotros/Nosotros";
@@ -12,6 +13,7 @@ import Movimientos from "./components/movimientos/Movimientos";
 
 function App() {
   return (
+    <ProductContextProvider>
     <DataProvider>  
     <Router>
       <Navbar />
@@ -25,6 +27,7 @@ function App() {
       </Switch>
     </Router>
     </DataProvider>
+    </ProductContextProvider>
   );
 }
 
