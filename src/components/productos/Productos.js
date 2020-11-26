@@ -1,4 +1,4 @@
-import React,{ Fragment,useState,useContext} from "react";
+import React,{ Fragment,useState,useContext, useEffect} from "react";
 import {ProductContext} from '../../context/ProductContext'
 
 const Productos = () => {
@@ -8,15 +8,14 @@ const Productos = () => {
     createProduct,
     deleteProduct,
     editProduct,
-    updateProduct, 
+    updateProduct,
   } = useContext(ProductContext);
 
-  //print all Products
-  console.log(products)
-
   const [productData, setProductData] = useState({_id:'', name:'', category:'', description:''});
+  const [modoEdicion, setModoEdicion] = React.useState(false)
+  
 
-  const handleSubmit = async (e) =>{
+  const _savedProduct = async (e) =>{
     e.preventDefault();
     console.log("Agregar Producto: ",productData)
     createProduct(productData);
@@ -28,7 +27,6 @@ const Productos = () => {
       ...productData,
       [field]: data,
     });
-    console.log(productData);
   };
 
   const _deleteProduct = (product) => {
@@ -37,17 +35,29 @@ const Productos = () => {
       setProductData({_id:'', name:'', category:'', description:''});
   };
   
-  const _editProduct = (product) => {
-    console.log("Edit product: ",product)
-    setProductData(product)
-    //editProduct(product);
-    //setProductData({_id:'', name:'', category:'', description:''});
+  const _activeEdit =async (e,item) => {
+    e.preventDefault();
+    console.log("Edit product: ",item)
+    setModoEdicion(true)
+    setProductData(item)
   };
+
+  const _cancelProduct = ()=>{
+    setProductData({_id:'', name:'', category:'', description:''})
+  }
+
+  const edicionX = async(e) => {
+    e.preventDefault();
+    console.log("edicionX: ",productData)
+    updateProduct(productData)
+    setProductData({_id:'', name:'', category:'', description:''});
+ 
+  }
 
   return (
     <Fragment>
       <div>
-        <form onSubmit={handleSubmit} className="border-2 border-blue-700  rounded mx-10 mt-10 px-6 pt-3 pb-8 mb-8">
+        <form className="border-2 border-blue-700  rounded mx-10 mt-10 px-6 pt-3 pb-8 mb-8">
           <h1 className="font-base text-2xl text-center mb-4 text-gray-700">
             Registro de Productos
           </h1>
@@ -100,15 +110,31 @@ const Productos = () => {
           </div>
       
           <div className="flex items-center justify-center">
+
+            
+            {
+              modoEdicion ? (
+            
             <button
               className="shadow-md h-auto w-auto bg-blue-800 hover:bg-blue-900 text-white font-bold py-1  mt-6 px-2 focus:outline-none focus:shadow-outline mx-5"
-              type="submit"
+              onClick={e => {edicionX(e)}}
             >
-              Confirmar
+              
+              Editar
             </button>
+              ): (
+                <button
+                className="shadow-md h-auto w-auto bg-blue-800 hover:bg-blue-900 text-white font-bold py-1  mt-6 px-2 focus:outline-none focus:shadow-outline mx-5"
+                onClick={e => {_savedProduct(e)}}
+              >
+                Agregar
+              </button>
+              )
+            }  
+
             <button
               className="shadow-md h-auto w-auto bg-blue-800 hover:bg-blue-900 text-white font-bold py-1  mt-6 px-2 focus:outline-none focus:shadow-outline mx-5"
-              type="submit"
+              onClick={_cancelProduct}
             >
               Cancelar
             </button>
@@ -133,15 +159,15 @@ const Productos = () => {
           </thead>
           <tbody>
           {
-          products.map((item)=>{
+          products.map((item,index)=>{
             return(
-              <tr key={item._id}>
+              <tr key={index}>
                 <td >{item._id}</td>
                 <td>{item.name}</td>
                 <td>{item.category}</td>
                 <td>{item.description}</td>
                 <td>
-                <button className="border border-yellow-500 bg-yellow-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-yellow-600 focus:outline-none focus:shadow-outline" onClick={() => _editProduct(item)}>Edit</button>
+                <button className="border border-yellow-500 bg-yellow-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-yellow-600 focus:outline-none focus:shadow-outline"   onClick={e => {_activeEdit(e,item)}}>Edit</button>
                 <button className="border border-red-500 bg-red-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline" onClick={() => _deleteProduct(item)}>Delete</button>
                 </td>
               </tr>

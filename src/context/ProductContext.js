@@ -1,17 +1,19 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect,useCallback } from "react";
 import { ProductService } from '../services/productServices';
 
 export const ProductContext = createContext();
 
 const ProductContextProvider = (props) => {
-  const productService = new ProductService();
+  const productService = new ProductService()
 
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState([])
 
-  const [editProduct, setEditProduct] = useState(null);
+  const [editProduct, setEditProduct] = useState(null)
+ 
 
   useEffect(() => {
     productService.readAll().then((data) => setProducts(data));
+    //showProduct()
   }, []);
 
   const createProduct = (product) => {
@@ -36,13 +38,11 @@ const ProductContextProvider = (props) => {
   const updateProduct = (product) => {
     productService
       .update(product)
-      .then((data) =>
-        setProducts(
-          products.map((p) => (p._id === product._id ? data : product))
-        )
+      .then(res => {
+        console.log("context: ", res)
+        productService.readAll().then((data) => setProducts(data));
+      }
       );
-
-    setEditProduct(null);
   };
 
   return (
