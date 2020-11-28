@@ -1,10 +1,11 @@
 import React, { Fragment, useContext } from "react";
-import useExample from '../../hooks/product/example'
+import useExample from "../../hooks/product/example";
+import Navbar from "../../components/layouts/Navbar";
 
 const Movimientos = () => {
-
   return (
     <Fragment>
+      <Navbar />
       <div>
         <div className="border-2 border-blue-700  rounded  mx-10 mt-10 px-6 pt-3 pb-8 mb-8">
           <form className="">
@@ -188,7 +189,6 @@ const Movimientos = () => {
           </table>
         </div>
       </div>
-
     </Fragment>
   );
 };

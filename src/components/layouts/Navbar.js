@@ -14,7 +14,7 @@ const Navbar = () => {
       </div>
       <div className="flex h-full">
         <Link
-          to="/"
+          to="/productos"
           className="hover:bg-gray-600 hover:shadow-md hover:text-white text-gray-800 font-bold ml-2 py-2 pl-4 mr-2 pr-4 h-full inline-flex"
         >
           <span className="font-hairline text-xl mt-2">Productos</span>
