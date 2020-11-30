@@ -1,6 +1,7 @@
 import React, { Fragment, useContext } from "react";
 import useExample from "../../hooks/product/example";
 import Navbar from "../../components/layouts/Navbar";
+import { Link } from "react-router-dom";
 
 const Movimientos = () => {
   return (
@@ -29,12 +30,14 @@ const Movimientos = () => {
               >
                 Buscar
               </button>
-              <button
-                className="rounded-none w-auto bg-blue-700 hover:bg-blue-800 text-white font-bold py-1  mt-6  focus:outline-none focus:shadow-outline "
-                type="submit"
-              >
-                Nuevo producto
-              </button>
+              <Link to="/productos" className="w-full">
+                <button
+                  className="rounded-none w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-2   mt-6  focus:outline-none focus:shadow-outline "
+                  type="submit"
+                >
+                  Nuevo producto
+                </button>
+              </Link>
             </div>
           </form>
           <div className="mt-2 grid grid-cols-5 gap-2">

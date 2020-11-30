@@ -7,9 +7,12 @@ const Navbar = () => {
     <nav className="flex items-center justify-between flex-wrap shadow fondo-nav px-6 h-16 border-b-2 border-blue-700">
       <div className="flex items-center flex-shrink-0 text-black mr-6 ">
         <div className="ml-2 flex flex-col">
-          <span className="font-bold text-lg tracking-tight text-blue-800">
-            OPENSTOCK
-          </span>
+          <Link to="/productos">
+            {" "}
+            <span className="font-bold text-lg tracking-tight text-blue-800">
+              OPENSTOCK
+            </span>
+          </Link>
         </div>
       </div>
       <div className="flex h-full">
@@ -26,7 +29,7 @@ const Navbar = () => {
           <span className="font-hairline text-xl mt-2">Movimientos</span>
         </Link>
         <Link
-          to="/principal"
+          to="/kardex"
           className="hover:bg-gray-600 hover:shadow-md hover:text-white text-gray-800 font-bold ml-2 py-2 pl-4 mr-2 pr-4 h-full inline-flex"
         >
           <span className="font-hairline text-xl mt-2">Kardex</span>

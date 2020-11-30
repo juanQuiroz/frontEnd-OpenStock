@@ -9,6 +9,7 @@ import Productos from "./components/productos/Productos";
 import Nosotros from "./components/nosotros/Nosotros";
 import Movimientos from "./components/movimientos/Movimientos";
 import Login from "./components/auth/Login";
+import Kardex from "./components/kardex/Kardex";
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
           <Switch>
             <Route exact path="/" component={Login} />
             <Route exact path="/productos" component={Productos} />
-            <Route exact path="/productos" component={Productos} />
+            <Route exact path="/kardex" component={Kardex} />
             <Route exact path="/nosotros" component={Nosotros} />
             <Route exact path="/movimientos" component={Movimientos} />
           </Switch>
