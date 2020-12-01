@@ -1,9 +1,73 @@
-import React, { Fragment, useContext } from "react";
-import useExample from "../../hooks/product/example";
+import React, { Fragment, useContext, useState } from "react";
+import {MovementContext} from '../../context/MovementContext'
 import Navbar from "../../components/layouts/Navbar";
 import { Link } from "react-router-dom";
 
 const Movimientos = () => {
+
+  const {
+    createMovement,
+    deleteMovement,
+    findMovement,
+    updateMovement,
+    editMovement,
+    movements,
+  } = useContext(MovementContext);
+
+  console.log("API MOVEMENT: ", movements)
+
+  const [movementData, setMovementData] = useState({
+    _id: "",
+    provider: "",
+    invoice: "",
+    price_unit: "",
+    price_total: "",
+    quantity: "",
+    type_movement: "",
+    date: ""
+  });
+  const [modoEdicion, setModoEdicion] = React.useState(false);
+
+  const _savedMovement = async e => {
+    e.preventDefault();
+    console.log("Agregar Movimiento: ", movementData);
+    createMovement(movementData);
+    setMovementData({ _id: "", provider: "", invoice: "", price_unit: "" , price_total:"", quantity: "",type_movement:"", date:""});
+  };
+
+  const updateField = (data, field) => {
+    setMovementData({
+      ...movementData,
+      [field]: data,
+    });
+  };
+
+  const _deleteMovement = movement => {
+    console.log("Delete movement: ", movement._id);
+    deleteMovement(movement._id);
+    setMovementData({ _id: "", provider: "", invoice: "", price_unit: "" , price_total:"", quantity: "",type_movement:"", date:""});
+  };
+
+  const _activeEdit = async (e, item) => {
+    e.preventDefault();
+    console.log("Edit product: ", item);
+    setModoEdicion(true);
+    setMovementData(item);
+  };
+
+  const _cancelMovement = () => {
+    setMovementData({ _id: "", provider: "", invoice: "", price_unit: "" , price_total:"", quantity: "",type_movement:"", date:""});
+  };
+
+  const edicionX = async e => {
+    e.preventDefault();
+    console.log("edicionX: ", movementData);
+    updateMovement(movementData);
+    setMovementData({ _id: "", provider: "", invoice: "", price_unit: "" , price_total:"", quantity: "",type_movement:"", date:""});
+    setModoEdicion(false);
+  };
+
+
   return (
     <Fragment>
       <Navbar />
@@ -56,6 +120,8 @@ const Movimientos = () => {
                     className="rounded-none h-8 appearance-none border  w-full py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     type="text"
                     placeholder="Proveedor"
+                    onChange={e => updateField(e.target.value, "provider")}
+                    value={movementData.provider}
                   />
                   <button
                     className="rounded-none h-8 w-10 bg-blue-800 hover:bg-blue-900 text-white font-bold py-1 px-2 focus:outline-none focus:shadow-outline"
@@ -69,6 +135,8 @@ const Movimientos = () => {
                     className="mt-0 rounded-none h-8 appearance-none border  w-full py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     type="text"
                     placeholder="N° de Factura"
+                    onChange={e => updateField(e.target.value, "invoice")}
+                    value={movementData.invoice}
                   />
                 </div>
                 <div className="">
@@ -76,6 +144,8 @@ const Movimientos = () => {
                     className="mt-0 rounded-none h-8 appearance-none border  w-full py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     type="text"
                     placeholder="Unidad"
+                    onChange={e => updateField(e.target.value, "quantity")}
+                    value={movementData.quantity}
                   />
                 </div>
                 <div className="">
@@ -83,6 +153,8 @@ const Movimientos = () => {
                     className="mt-0 rounded-none h-8 appearance-none border  w-full py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     type="text"
                     placeholder="Precio Unidad"
+                    onChange={e => updateField(e.target.value, "price_unit")}
+                    value={movementData.price_unit}
                   />
                 </div>
                 <div className="">
@@ -90,12 +162,16 @@ const Movimientos = () => {
                     className="mt-0 rounded-none h-8 appearance-none border  w-full py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     type="text"
                     placeholder="Precio total"
+                    onChange={e => updateField(e.target.value, "price_total")}
+                    value={movementData.price_total}
                   />
                 </div>
                 <div className="">
                   <input
                     className="mt-0 rounded-none h-8 appearance-none border  w-full py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     type="Date"
+                    onChange={e => updateField(e.target.value, "date")}
+                    value={movementData.date}
                   />
                 </div>
                 <div className="col-span-2">
@@ -103,21 +179,37 @@ const Movimientos = () => {
                     className="mt-0 rounded-none h-8 appearance-none border  w-full py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     type="text"
                     placeholder=" tipo de movimiento"
+                    onChange={e => updateField(e.target.value, "type_movement")}
+                    value={movementData.type_movement}
                   />
                 </div>
                 <div className="col-span-3 flex items-center justify-center">
-                  <button
-                    className="rounded-none w-24 bg-blue-800 hover:bg-blue-900 text-white font-bold px-3 py-1  mx-3  mt-4 focus:outline-none focus:shadow-outline "
-                    type="submit"
-                  >
-                    Buscar
-                  </button>
-                  <button
-                    className="rounded-none w-auto bg-blue-800 hover:bg-blue-900 text-white font-bold px-3 py-1   mt-4  focus:outline-none focus:shadow-outline "
-                    type="submit"
-                  >
-                    Nuevo producto
-                  </button>
+                {modoEdicion ? (
+              <button
+                className="shadow-md h-auto w-auto bg-blue-800 hover:bg-blue-900 text-white font-bold py-1  mt-6 px-2 focus:outline-none focus:shadow-outline mx-5"
+                onClick={e => {
+                  edicionX(e);
+                }}
+              >
+                Editar
+              </button>
+            ) : (
+              <button
+                className="shadow-md h-auto w-auto bg-blue-800 hover:bg-blue-900 text-white font-bold py-1  mt-6 px-2 focus:outline-none focus:shadow-outline mx-5"
+                onClick={e => {
+                  _savedMovement(e);
+                }}
+              >
+                Agregar
+              </button>
+            )}
+
+            <button
+              className="shadow-md h-auto w-auto bg-blue-800 hover:bg-blue-900 text-white font-bold py-1  mt-6 px-2 focus:outline-none focus:shadow-outline mx-5"
+              onClick={_cancelMovement}
+            >
+              Cancelar
+            </button>
                 </div>
               </form>
             </div>
@@ -131,63 +223,50 @@ const Movimientos = () => {
           <table className="shadow text-sm table-auto bg-white rounded-md mt-2 w-full">
             <thead>
               <tr className="bg-gray-600 rounded-md text-white">
-                <th className="px-4 py-2">Nombre de producto</th>
-                <th className="px-4 py-2">Descripción</th>
-                <th className="px-4 py-2">Cod. Interno</th>
-                <th className="px-4 py-2">Categoria</th>
-                <th className="px-4 py-2">movimiento</th>
+                <th className="px-4 py-2">Codigo</th>
+                <th className="px-4 py-2">Proveedor</th>
+                <th className="px-4 py-2">N° Factura</th>
+                <th className="px-4 py-2">Precio Unit</th>
+                <th className="px-4 py-2">Cantidad</th>
+                <th className="px-4 py-2">Precio Total</th>
+                <th className="px-4 py-2">Tipo Mov</th>
+                <th className="px-4 py-2">Fecha</th> 
+                <th className="px-4 py-2">Acciones</th>                
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td className="border px-4 py-2">Coca cola</td>
-                <td className="border px-4 py-2">Cocacola 2L descartable</td>
-                <td className="border px-4 py-2">cc2ld</td>
-                <td className="border px-4 py-2">Bebidas</td>
-                <td className="border px-4 py-2">Compra</td>
-              </tr>
-              <tr>
-                <td className="border px-4 py-2">Coca cola</td>
-                <td className="border px-4 py-2">Cocacola 2L descartable</td>
-                <td className="border px-4 py-2">cc2ld</td>
-                <td className="border px-4 py-2">Bebidas</td>
-                <td className="border px-4 py-2">Compra</td>
-              </tr>
-              <tr>
-                <td className="border px-4 py-2">Coca cola</td>
-                <td className="border px-4 py-2">Cocacola 2L descartable</td>
-                <td className="border px-4 py-2">cc2ld</td>
-                <td className="border px-4 py-2">Bebidas</td>
-                <td className="border px-4 py-2">Perdida</td>
-              </tr>
-              <tr>
-                <td className="border px-4 py-2">Coca cola</td>
-                <td className="border px-4 py-2">Cocacola 2L descartable</td>
-                <td className="border px-4 py-2">cc2ld</td>
-                <td className="border px-4 py-2">Bebidas</td>
-                <td className="border px-4 py-2">Venta</td>
-              </tr>
-              <tr>
-                <td className="border px-4 py-2">Coca cola</td>
-                <td className="border px-4 py-2">Cocacola 2L descartable</td>
-                <td className="border px-4 py-2">cc2ld</td>
-                <td className="border px-4 py-2">Bebidas</td>
-                <td className="border px-4 py-2">Compra</td>
-              </tr>
-              <tr>
-                <td className="border px-4 py-2">Coca cola</td>
-                <td className="border px-4 py-2">Cocacola 2L descartable</td>
-                <td className="border px-4 py-2">cc2ld</td>
-                <td className="border px-4 py-2">Bebidas</td>
-                <td className="border px-4 py-2">Venta</td>
-              </tr>
-              <tr>
-                <td className="border px-4 py-2">Coca cola</td>
-                <td className="border px-4 py-2">Cocacola 2L descartable</td>
-                <td className="border px-4 py-2">cc2ld</td>
-                <td className="border px-4 py-2">Bebidas</td>
-                <td className="border px-4 py-2">Compra</td>
-              </tr>
+              {
+                movements.map((item, index) => {
+                  return (
+                    <tr key={index}>
+                      <td>{item._id}</td>
+                      <td>{item.provider}</td>
+                      <td>{item.inovice}</td>
+                      <td>{item.price_unit}</td>
+                      <td>{item.quantity}</td>
+                      <td>S/ {item.price_unit * item.quantity}</td>
+                      <td>{item.type_movement}</td>
+                      <td>{item.date}</td>
+                      <td>
+                    <button
+                      className="border border-yellow-500 bg-yellow-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-yellow-600 focus:outline-none focus:shadow-outline"
+                      onClick={e => {
+                        _activeEdit(e, item);
+                      }}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="border border-red-500 bg-red-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline"
+                      onClick={() => _deleteMovement(item)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                    </tr>
+                  )
+                })
+              }
             </tbody>
           </table>
         </div>
