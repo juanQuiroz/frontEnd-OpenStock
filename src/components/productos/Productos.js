@@ -56,6 +56,7 @@ const Productos = () => {
     console.log("edicionX: ", productData);
     updateProduct(productData);
     setProductData({ _id: "", name: "", category: "", description: "" });
+    setModoEdicion(false);
   };
 
   return (
