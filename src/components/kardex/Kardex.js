@@ -21,13 +21,22 @@ const Kardex = () => {
               <th className="px-4 py-2  border-white border-2" rowspan="2">
                 N° Factura
               </th>
-              <th className="px-4 py-2 border-white border-2" colSpan="3">
+              <th
+                className="px-4 py-2 border-white border-2 bg-gray-700"
+                colSpan="3"
+              >
                 Entradas al inventario
               </th>
-              <th className="px-4 py-2  border-white border-2" colSpan="3">
+              <th
+                className="px-4 py-2  border-white border-2 bg-gray-700"
+                colSpan="3"
+              >
                 Salidas inventario
               </th>
-              <th className="px-4 py-2  border-white border-2" colSpan="3">
+              <th
+                className="px-4 py-2  border-white border-2 bg-gray-700"
+                colSpan="3"
+              >
                 Saldo inventario
               </th>
             </tr>
@@ -50,20 +59,20 @@ const Kardex = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td className="border px-4 py-2">21/11/2020</td>
-              <td className="border px-4 py-2">venta</td>
-              <td className="border px-4 py-2">venta de mercaderia</td>
-              <td className="border px-4 py-2">EB01-252</td>
-              <td className="border px-4 py-2"></td>
-              <td className="border px-4 py-2"></td>
-              <td className="border px-4 py-2"></td>
-              <td className="border px-4 py-2">12</td>
-              <td className="border px-4 py-2">0.6</td>
-              <td className="border px-4 py-2">7.18</td>
-              <td className="border px-4 py-2"></td>
-              <td className="border px-4 py-2">0.6</td>
-              <td className="border px-4 py-2"></td>
+            <tr className="py-0">
+              <td className="border px-1 py-1">21/11/2020</td>
+              <td className="border px-1 py-1">venta</td>
+              <td className="border px-1 py-1">venta de mercaderia</td>
+              <td className="border px-1 py-1">EB01-252</td>
+              <td className="border px-1 py-1"></td>
+              <td className="border px-1 py-1"></td>
+              <td className="border px-1 py-1"></td>
+              <td className="border px-1 py-1">12</td>
+              <td className="border px-1 py-1">0.6</td>
+              <td className="border px-1 py-1">7.18</td>
+              <td className="border px-1 py-1"></td>
+              <td className="border px-1 py-1">0.6</td>
+              <td className="border px-1 py-1"></td>
             </tr>
           </tbody>
         </table>

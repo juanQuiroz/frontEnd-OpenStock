@@ -35,7 +35,15 @@ const Navbar = () => {
           <span className="font-hairline text-xl mt-2">Kardex</span>
         </Link>
       </div>
+
       <div className="flex">
+        <Link
+          type="button"
+          to="/"
+          className="bg-red-700 shadow-md text-white font-bold ml-2 py-1 pl-4 mr-2 pr-4  rounded inline-flex items-center"
+        >
+          <button className="font-hairline text-xl">Salir</button>
+        </Link>
         <Link
           type="button"
           to="/nosotros"

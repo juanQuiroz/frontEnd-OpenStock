@@ -1,9 +1,17 @@
 import React, { Fragment, useContext, useState } from "react";
-import {MovementContext} from '../../context/MovementContext'
+import { MovementContext } from "../../context/MovementContext";
+import { ProductContext } from "../../context/ProductContext";
 import Navbar from "../../components/layouts/Navbar";
 import { Link } from "react-router-dom";
 
+import { Hint } from "react-autocomplete-hint";
+
 const Movimientos = () => {
+  const [producto, setProducto] = useState({
+    producto: "",
+  });
+
+  const { products, findProduct } = useContext(ProductContext);
 
   const {
     createMovement,
@@ -14,7 +22,7 @@ const Movimientos = () => {
     movements,
   } = useContext(MovementContext);
 
-  console.log("API MOVEMENT: ", movements)
+  console.log("API MOVEMENT: ", movements);
 
   const [movementData, setMovementData] = useState({
     _id: "",
@@ -24,7 +32,7 @@ const Movimientos = () => {
     price_total: "",
     quantity: "",
     type_movement: "",
-    date: ""
+    date: "",
   });
   const [modoEdicion, setModoEdicion] = React.useState(false);
 
@@ -32,7 +40,16 @@ const Movimientos = () => {
     e.preventDefault();
     console.log("Agregar Movimiento: ", movementData);
     createMovement(movementData);
-    setMovementData({ _id: "", provider: "", invoice: "", price_unit: "" , price_total:"", quantity: "",type_movement:"", date:""});
+    setMovementData({
+      _id: "",
+      provider: "",
+      invoice: "",
+      price_unit: "",
+      price_total: "",
+      quantity: "",
+      type_movement: "",
+      date: "",
+    });
   };
 
   const updateField = (data, field) => {
@@ -45,7 +62,16 @@ const Movimientos = () => {
   const _deleteMovement = movement => {
     console.log("Delete movement: ", movement._id);
     deleteMovement(movement._id);
-    setMovementData({ _id: "", provider: "", invoice: "", price_unit: "" , price_total:"", quantity: "",type_movement:"", date:""});
+    setMovementData({
+      _id: "",
+      provider: "",
+      invoice: "",
+      price_unit: "",
+      price_total: "",
+      quantity: "",
+      type_movement: "",
+      date: "",
+    });
   };
 
   const _activeEdit = async (e, item) => {
@@ -56,47 +82,83 @@ const Movimientos = () => {
   };
 
   const _cancelMovement = () => {
-    setMovementData({ _id: "", provider: "", invoice: "", price_unit: "" , price_total:"", quantity: "",type_movement:"", date:""});
+    setMovementData({
+      _id: "",
+      provider: "",
+      invoice: "",
+      price_unit: "",
+      price_total: "",
+      quantity: "",
+      type_movement: "",
+      date: "",
+    });
   };
 
   const edicionX = async e => {
     e.preventDefault();
     console.log("edicionX: ", movementData);
     updateMovement(movementData);
-    setMovementData({ _id: "", provider: "", invoice: "", price_unit: "" , price_total:"", quantity: "",type_movement:"", date:""});
+    setMovementData({
+      _id: "",
+      provider: "",
+      invoice: "",
+      price_unit: "",
+      price_total: "",
+      quantity: "",
+      type_movement: "",
+      date: "",
+    });
     setModoEdicion(false);
   };
 
+  const buscarProducto = e => {
+    setProducto({
+      ...producto,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // Obtener prodcutos para autocompletado
+  const productosAPI = products;
+  console.log(productosAPI);
+  const options = [];
+  productosAPI.forEach(producto => options.push(producto.name));
+  console.log(options);
 
   return (
     <Fragment>
       <Navbar />
+
       <div>
-        <div className="border-2 border-blue-700  rounded  mx-10 mt-10 px-6 pt-3 pb-8 mb-8">
+        <div className="border-2 border-blue-700 rounded mx-10 mt-10 px-6 pt-3 pb-8 mb-8">
           <form className="">
             <h1 className="font-base text-2xl text-center mb-4 text-gray-700">
               Registro de Movimientos
             </h1>
             <div className="grid grid-cols-3 gap-0">
-              <div>
+              <div className="w-full">
                 <label className="block text-gray-700 text-sm font-bold mb-1">
                   Nombre de producto
                 </label>
-                <input
-                  className="rounded-none appearance-none border  w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  type="text"
-                />
+
+                <Hint options={options} className="w-full">
+                  <input
+                    type="text"
+                    onChange={buscarProducto}
+                    className="rounded-none appearance-none border  w-64 py-2 px-3 text-gray-700 leading-tight focus:outline-none "
+                  />
+                </Hint>
               </div>
 
               <button
-                className="rounded-none w-24 bg-blue-800 hover:bg-blue-900 text-white font-bold py-1  mt-6 px-2 focus:outline-none focus:shadow-outline mx-0"
+                className="rounded-none w-24 bg-blue-800 hover:bg-blue-900 text-white font-bold py-1  mt-6 px-2 focus:outline-none  mx-0"
                 type="submit"
               >
                 Buscar
               </button>
               <Link to="/productos" className="w-full">
                 <button
-                  className="rounded-none w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-2   mt-6  focus:outline-none focus:shadow-outline "
+                  className="rounded-none w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-2   mt-6  focus:outline-none "
                   type="submit"
                 >
                   Nuevo producto
@@ -184,32 +246,32 @@ const Movimientos = () => {
                   />
                 </div>
                 <div className="col-span-3 flex items-center justify-center">
-                {modoEdicion ? (
-              <button
-                className="shadow-md h-auto w-auto bg-blue-800 hover:bg-blue-900 text-white font-bold py-1  mt-6 px-2 focus:outline-none focus:shadow-outline mx-5"
-                onClick={e => {
-                  edicionX(e);
-                }}
-              >
-                Editar
-              </button>
-            ) : (
-              <button
-                className="shadow-md h-auto w-auto bg-blue-800 hover:bg-blue-900 text-white font-bold py-1  mt-6 px-2 focus:outline-none focus:shadow-outline mx-5"
-                onClick={e => {
-                  _savedMovement(e);
-                }}
-              >
-                Agregar
-              </button>
-            )}
+                  {modoEdicion ? (
+                    <button
+                      className="shadow-md h-auto w-auto bg-blue-800 hover:bg-blue-900 text-white font-bold py-1  mt-6 px-2 focus:outline-none focus:shadow-outline mx-5"
+                      onClick={e => {
+                        edicionX(e);
+                      }}
+                    >
+                      Editar
+                    </button>
+                  ) : (
+                    <button
+                      className="shadow-md h-auto w-auto bg-blue-800 hover:bg-blue-900 text-white font-bold py-1  mt-6 px-2 focus:outline-none focus:shadow-outline mx-5"
+                      onClick={e => {
+                        _savedMovement(e);
+                      }}
+                    >
+                      Agregar
+                    </button>
+                  )}
 
-            <button
-              className="shadow-md h-auto w-auto bg-blue-800 hover:bg-blue-900 text-white font-bold py-1  mt-6 px-2 focus:outline-none focus:shadow-outline mx-5"
-              onClick={_cancelMovement}
-            >
-              Cancelar
-            </button>
+                  <button
+                    className="shadow-md h-auto w-auto bg-blue-800 hover:bg-blue-900 text-white font-bold py-1  mt-6 px-2 focus:outline-none focus:shadow-outline mx-5"
+                    onClick={_cancelMovement}
+                  >
+                    Cancelar
+                  </button>
                 </div>
               </form>
             </div>
@@ -230,43 +292,41 @@ const Movimientos = () => {
                 <th className="px-4 py-2">Cantidad</th>
                 <th className="px-4 py-2">Precio Total</th>
                 <th className="px-4 py-2">Tipo Mov</th>
-                <th className="px-4 py-2">Fecha</th> 
-                <th className="px-4 py-2">Acciones</th>                
+                <th className="px-4 py-2">Fecha</th>
+                <th className="px-4 py-2">Acciones</th>
               </tr>
             </thead>
             <tbody>
-              {
-                movements.map((item, index) => {
-                  return (
-                    <tr key={index}>
-                      <td>{item._id}</td>
-                      <td>{item.provider}</td>
-                      <td>{item.inovice}</td>
-                      <td>{item.price_unit}</td>
-                      <td>{item.quantity}</td>
-                      <td>S/ {item.price_unit * item.quantity}</td>
-                      <td>{item.type_movement}</td>
-                      <td>{item.date}</td>
-                      <td>
-                    <button
-                      className="border border-yellow-500 bg-yellow-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-yellow-600 focus:outline-none focus:shadow-outline"
-                      onClick={e => {
-                        _activeEdit(e, item);
-                      }}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      className="border border-red-500 bg-red-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline"
-                      onClick={() => _deleteMovement(item)}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                    </tr>
-                  )
-                })
-              }
+              {movements.map((item, index) => {
+                return (
+                  <tr key={index}>
+                    <td>{item._id}</td>
+                    <td>{item.provider}</td>
+                    <td>{item.inovice}</td>
+                    <td>{item.price_unit}</td>
+                    <td>{item.quantity}</td>
+                    <td>S/ {item.price_unit * item.quantity}</td>
+                    <td>{item.type_movement}</td>
+                    <td>{item.date}</td>
+                    <td>
+                      <button
+                        className="border border-yellow-500 bg-yellow-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-yellow-600 focus:outline-none focus:shadow-outline"
+                        onClick={e => {
+                          _activeEdit(e, item);
+                        }}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="border border-red-500 bg-red-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline"
+                        onClick={() => _deleteMovement(item)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
